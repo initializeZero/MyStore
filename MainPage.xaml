@@ -7,6 +7,28 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="#232733">
+    
+    <Page.Resources>
+        <Style x:Key="AppListItemTextBlockStyle_Title" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Key="AppListItemTextBlockStyle_Score" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiLight"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+        <Style x:Key="AppListItemTextBlockStyle_Status" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiLight"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+    </Page.Resources>
 
     <!-- 最外层Border用于设置背景, 带圆角-->
     <Border Width="Auto" Height="320" Margin="50" CornerRadius="10"
@@ -25,7 +47,7 @@
             </LinearGradientBrush>
         </Border.Background>
 
-        
+
         <Grid>
 
             <!--整体布局采用表格布局, 分为两列-->
@@ -37,7 +59,7 @@
             </Grid.ColumnDefinitions>
 
             <!--第一列用StackPanel展示堆叠排列的布局; VerticalAlignment="Center"可以让子控件整体垂直居中-->
-            <StackPanel VerticalAlignment="Center" Margin="35,0,10,0">
+            <StackPanel VerticalAlignment="Center" Margin="35,0,10,0" Grid.Column="0">
 
                 <!--StackPanel内的所有TextBlock统一设置外边距与字体-->
                 <StackPanel.Resources>
@@ -65,12 +87,138 @@
                     />
 
                 <!--包裹按钮的边框, 主要用于设置圆角与边框-->
-                <Border                    Margin="0,30,0,0"                    HorizontalAlignment="Left"                    BorderThickness="0.75"                    BorderBrush="#40FFFFFF"                    CornerRadius="5"                    >                    <!--SeeAll按钮-->                    <Button                        BorderThickness="0"                        Content="See all"                        Foreground="White"                        Background="#20FFFFFF"                        Width="128"                        Height="32"                        Name="Button_SeeAll"                        Click="ButtonOnClick_SeeAll"                        FontSize="16"
+                <Border
+                    Margin="0,30,0,0"
+                    HorizontalAlignment="Left"
+                    BorderThickness="0.75"
+                    BorderBrush="#40FFFFFF"
+                    CornerRadius="5"
+                    >
+
+                    <!--SeeAll按钮-->
+                    <Button
+                        BorderThickness="0"
+                        Content="See all"
+                        Foreground="White"
+                        Background="#20FFFFFF"
+                        Width="128"
+                        Height="32"
+                        Name="Button_SeeAll"
+                        Click="ButtonOnClick_SeeAll"
+                        FontSize="16"
                         FontFamily="Segoe UI"
-                        FontWeight="Normal"                    />                                    </Border>
+                        FontWeight="Normal"
+                    />
+
+                </Border>
             </StackPanel>
 
+            <!--第二列用ListView展示横向列表布局-->
+            <ListView x:Name="AppListView"
+                Grid.Column="1"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                Margin="30,0,0,0"
+            >
+
+                <!--ListView ItemsPanel配置数据作为整体展示的布局方式, 排列方式等, 这里配置为横向排列-->
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            SizeChanged="AppItemsPanel_SizeChanged"
+                        />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <!--ListView ItemContainerStyle 自定义控件中每个Item的容器样式-->
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Margin" Value="1"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <!--ListView ItemTemplate 自定义控件中每个Item容器具体布局如何组织/自定义Item布局-->
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:AppItemEntity">
+
+                        <Border
+                            Grid.Column="1"
+                            x:Name="AppItemBorder"
+                            Width="170" Height="220"
+                            CornerRadius="8"
+                            Background="#BB303030"
+                        >
+
+                            <!--ListView 一个ItemView的布局实现, 这里用相对布局实现, 表格嵌套有点麻烦..-->
+                            <RelativePanel>
+                                <Border
+                                    Background="#484848"
+                                    x:Name="AppIconBorder"
+                                    Height="126"
+                                    RelativePanel.AlignTopWithPanel="True"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                >
+                                    <Image
+                                        x:Name="AppIconImage"
+                                        Width="80" Height="80"
+                                        Source="{x:Bind IconUrl}"
+                                    />
+                                </Border>
+
+                                <TextBlock
+                                    x:Name="AppItem_Title"
+                                    Margin="16,6,16,6"
+                                    Style="{StaticResource AppListItemTextBlockStyle_Title}"
+                                    Text="{x:Bind Name}"
+                                    RelativePanel.Below="AppIconBorder"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                />
+
+                                <TextBlock x:Name="AppItem_Score"
+                                    Style="{StaticResource AppListItemTextBlockStyle_Score}"
+                                    Text="{x:Bind Score}"
+                                    Margin="16,0,16,12"
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    RelativePanel.AlignLeftWithPanel="True"
+                                    LineHeight="20"
+                                />
+
+                                <Border
+                                    Background="#40707070"
+                                    CornerRadius="4"
+                                    x:Name="AppItem_StatusBorder"
+                                    RelativePanel.AlignBottomWithPanel="True"
+                                    RelativePanel.AlignRightWithPanel="True"
+                                    Margin="16,0,16,12"
+                                >
+
+                                    <TextBlock x:Name="AppItem_Status"
+                                        Style="{StaticResource AppListItemTextBlockStyle_Status}"
+                                        Text="{x:Bind local:AppItemEntity.GetDisplayNameOfStatus(Status)}"
+                                        LineHeight="18"
+                                        Margin="8,2,8,2"
+                                    >
+
+                                    </TextBlock>
+
+                                </Border>
+
+                            </RelativePanel>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+
+            </ListView>
+
         </Grid>
+
     </Border>
 
 </Page>

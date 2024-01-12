@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppItemEntity.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -130,6 +131,11 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AppIcons\adobe_acrobat_reader_dc.png" />
+    <Content Include="AppIcons\adobe_photoshop.png" />
+    <Content Include="AppIcons\dolby_access.png" />
+    <Content Include="AppIcons\linkedin.png" />
+    <Content Include="AppIcons\tiktok.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
