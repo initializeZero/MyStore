@@ -153,6 +153,8 @@
 
                             <!--ListView 一个ItemView的布局实现, 这里用相对布局实现, 表格嵌套有点麻烦..-->
                             <RelativePanel>
+
+                                <!--Icon后面区域的背景色, 用提取图片主题色的方法设置-->
                                 <Border
                                     Background="#484848"
                                     x:Name="AppIconBorder"
@@ -162,6 +164,7 @@
                                     RelativePanel.AlignRightWithPanel="True"
                                 >
                                     <Image
+                                        Loaded="AppIcon_ImageLoaded"
                                         x:Name="AppIconImage"
                                         Width="80" Height="80"
                                         Source="{x:Bind IconUrl}"

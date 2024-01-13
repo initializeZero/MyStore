@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -84,6 +85,21 @@ namespace MyStore
         void ButtonOnClick_SeeAll(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("ButtonOnClick_SeeAll ");
+        }
+
+        // 列表中某个AppIcon加载完成后的回调通知
+        async void AppIcon_ImageLoaded(object sender, RoutedEventArgs e)
+        {
+            
+            if (sender is Image image) {
+                Debug.WriteLine($"AppIcon_ImageLoaded image:{image}");
+                var parent = VisualTreeHelper.GetParent(image) as Border;
+                if (parent != null) {
+                    Debug.WriteLine($"AppIcon_ImageLoaded parent border:{parent}");
+                    // 按照计算出的AppIcon主题色, 设置给上半部分的整体背景
+                    parent.Background = await ImageToThemeColorConverter.GetImageThemeColorBrushAsync(image.Source);
+                }
+            }
         }
 
         // AppList的ItemPanel 大小改变时的回调方法
