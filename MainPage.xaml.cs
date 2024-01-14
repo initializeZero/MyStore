@@ -198,5 +198,29 @@ namespace MyStore
                 border.Background = new SolidColorBrush(Color.FromArgb(0xBB, 0x30, 0x30, 0x30));
             }
         }
+
+        void Button_SeeAll_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                Debug.WriteLine($"Button_SeeAll_PointerEntered button:{button}");
+                // 鼠标指针移入时的背景色深一点
+                button.Background = new SolidColorBrush(Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF));
+            }
+            Debug.WriteLine("Button_SeeAll_PointerEntered");
+        }
+
+        void Button_SeeAll_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                Debug.WriteLine($"Button_SeeAll_PointerExited button:{button}");
+                // 鼠标指针移出时的背景色恢复原样
+                button.Background = new SolidColorBrush(Color.FromArgb(0x20, 0xFF, 0xFF, 0xFF));
+            }
+            Debug.WriteLine("Button_SeeAll_PointerExited");
+        }
     }
 }

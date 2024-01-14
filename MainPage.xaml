@@ -108,7 +108,27 @@
                         FontSize="16"
                         FontFamily="Segoe UI"
                         FontWeight="Normal"
-                    />
+                        
+                        
+                        PointerEntered="Button_SeeAll_PointerEntered"
+                        PointerExited="Button_SeeAll_PointerExited"
+                    >
+                        <!--修改下Button的鼠标指针事件响应似乎只有PointerEntered和PointerExited会生效, Pressed/Released无效, 可能是上面的Click事件处理后没有触发, 后续可以研究下如何修改-->
+                        
+                        <Button.Template>
+
+                            <!--修改下Button的ControlTemplate, 去掉默认的鼠标指针事件响应, 因为按下后会有默认的黑色边框, 以及按下状态的文字为黑色, 比较难看-->
+                            <ControlTemplate>
+                                <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                >
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                    </Button>
 
                 </Border>
             </StackPanel>
