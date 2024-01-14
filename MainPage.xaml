@@ -222,7 +222,7 @@
 
                                 <TextBlock x:Name="AppItem_Score"
                                     Style="{StaticResource AppListItemTextBlockStyle_Score}"
-                                    Text="{x:Bind Score}"
+                                    Text="{x:Bind local:AppItemEntity.GetDisplayScore(Score)}"
                                     Margin="16,0,16,12"
                                     RelativePanel.AlignBottomWithPanel="True"
                                     RelativePanel.AlignLeftWithPanel="True"

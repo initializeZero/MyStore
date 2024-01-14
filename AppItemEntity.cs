@@ -19,7 +19,8 @@ namespace MyStore
         public string IconUrl { get; set; }
         public STATUS Status { get; set; }
 
-        public static string GetDisplayNameOfStatus(STATUS status) {
+        public static string GetDisplayNameOfStatus(STATUS status)
+        {
             switch (status)
             {
                 case STATUS.FREE:
@@ -31,6 +32,11 @@ namespace MyStore
                 default:
                     return "Unknown";
             }
+        }
+
+        public static string GetDisplayScore(string Score)
+        {
+            return Score + "⭐";
         }
     }
 }
