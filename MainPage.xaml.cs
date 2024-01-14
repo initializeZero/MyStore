@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -102,10 +103,100 @@ namespace MyStore
             }
         }
 
+
+        private static T FindVisualParent<T>(DependencyObject obj) where T : DependencyObject
+        {
+            while (obj != null)
+            {
+                if (obj is T parent)
+                {
+                    return parent;
+                }
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+            return null;
+        }
+
         // AppList的ItemPanel 大小改变时的回调方法
         void AppItemsPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Debug.WriteLine("AppItemsPanel_SizeChanged ");
+            Debug.WriteLine("AppItemsPanel_SizeChanged");
+        }
+
+        // AppList的ItemView 鼠标指针移入后的位置变更与背景色变更
+        void AppItemBorder_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine("AppItemBorder_PointerEntered");
+            var border = sender as Border;
+            if (border != null) {
+                TranslateTransform translateTransform = new TranslateTransform();
+                translateTransform.Y = -2; // 在 Y 轴向上平移 3 个单位
+                border.RenderTransform = translateTransform;
+                border.Background = new SolidColorBrush(Color.FromArgb(0xBB, 0x60, 0x60, 0x60));
+            }
+        }
+
+        // AppList的ItemView 鼠标指针移出后的位置恢复与背景色恢复
+        void AppItemBorder_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine("AppItemBorder_PointerExited");
+            var border = sender as Border;
+            if (border != null)
+            {
+                TranslateTransform translateTransform = new TranslateTransform();
+                // 恢复正常, 背景色也恢复正常 BB303030
+                border.RenderTransform = translateTransform;
+                border.Background = new SolidColorBrush(Color.FromArgb(0xBB, 0x30, 0x30, 0x30));
+            }
+        }
+
+        // AppList的ItemView 鼠标指针按下后的位置恢复与背景色加深
+        void AppItemBorder_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine($"AppItemBorder_PointerPressed {e.OriginalSource}");
+            var border = sender as Border;
+            if (border != null)
+            {
+                TranslateTransform translateTransform = new TranslateTransform();
+                // 按下状态 位置恢复 背景色加深0xCE202020
+                border.RenderTransform = translateTransform;
+                border.Background = new SolidColorBrush(Color.FromArgb(0xCE, 0x20, 0x20, 0x20));
+            }
+            var listViewItem = FindVisualParent<ListViewItem>(e.OriginalSource as FrameworkElement);
+            if (listViewItem != null)
+            {
+                var clickedData = AppListView.ItemFromContainer(listViewItem) as AppItemEntity;
+                if (clickedData != null) {
+                    // 此处处理用户所点击的appItem数据
+                    Debug.WriteLine($"AppItemBorder_PointerPressed clicked appItem: {clickedData.Name}");
+                }
+            }
+        }
+
+        // AppList的ItemView 鼠标指针释放后 背景色恢复
+        void AppItemBorder_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine("AppItemBorder_PointerReleased");
+            var border = sender as Border;
+            if (border != null)
+            {
+                // 背景色也恢复正常 BB303030
+                border.Background = new SolidColorBrush(Color.FromArgb(0xBB, 0x30, 0x30, 0x30));
+            }
+        }
+
+        // AppList的ItemView 鼠标指针取消后的位置恢复与背景色恢复
+        void AppItemBorder_PointerCanceled(object sender, PointerRoutedEventArgs e)
+        {
+            Debug.WriteLine("AppItemBorder_PointerCanceled");
+            var border = sender as Border;
+            if (border != null)
+            {
+                TranslateTransform translateTransform = new TranslateTransform();
+                // 恢复正常, 背景色也恢复正常 BB303030
+                border.RenderTransform = translateTransform;
+                border.Background = new SolidColorBrush(Color.FromArgb(0xBB, 0x30, 0x30, 0x30));
+            }
         }
     }
 }

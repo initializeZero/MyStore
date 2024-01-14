@@ -135,7 +135,21 @@
                 <!--ListView ItemContainerStyle 自定义控件中每个Item的容器样式-->
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="Margin" Value="1"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <!-- 去除ItemContainer内边距 -->
+                        <Setter Property="Padding" Value="0" />
+                        <!-- ItemContainer外边距为10 -->
+                        <Setter Property="Margin" Value="10" />
+                        <!-- ItemContainer边框厚度为0 -->
+                        <Setter Property="BorderThickness" Value="0" />
+                        <!-- 去除默认点击缩小效果/点击后Container背景色的更改效果, 改用后面的鼠标指针事件实现 -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
 
@@ -149,6 +163,11 @@
                             Width="170" Height="220"
                             CornerRadius="8"
                             Background="#BB303030"
+                            PointerEntered="AppItemBorder_PointerEntered"
+                            PointerExited="AppItemBorder_PointerExited"
+                            PointerPressed="AppItemBorder_PointerPressed"
+                            PointerReleased="AppItemBorder_PointerReleased"
+                            PointerCanceled="AppItemBorder_PointerCanceled"
                         >
 
                             <!--ListView 一个ItemView的布局实现, 这里用相对布局实现, 表格嵌套有点麻烦..-->
